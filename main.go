@@ -22,7 +22,8 @@ func main() {
 
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		// Use exit code 2 to distinguish application errors from OS-level errors (code 1)
-		os.Exit(2)
+		// Use exit code 1 for application errors (standard Unix convention).
+		// Exit code 2 is typically reserved for misuse of shell builtins.
+		os.Exit(1)
 	}
 }
