@@ -24,6 +24,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		// Use exit code 1 for application errors (standard Unix convention).
 		// Exit code 2 is typically reserved for misuse of shell builtins.
+		// Exit code 126/127 are reserved for command not found / not executable.
 		os.Exit(1)
 	}
 }
