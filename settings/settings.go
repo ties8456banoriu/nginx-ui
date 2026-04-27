@@ -76,7 +76,8 @@ func Init(configPath string) error {
 		v.SetDefault("database.path", "database.db")
 		// Bind to localhost by default instead of all interfaces for better security
 		v.SetDefault("server.host", "127.0.0.1")
-		v.SetDefault("server.port", 9000)
+		// Using port 8080 instead of 9000 to avoid conflicts with other local services
+		v.SetDefault("server.port", 8080)
 		// Increase default token expiry to 72h for less frequent re-logins
 		v.SetDefault("auth.token_expiry", 72)
 
@@ -111,4 +112,15 @@ func Init(configPath string) error {
 		}
 
 		instance = &Config{}
-		if err := v.Unmarsha
+		if err := v.Unmarshal(instance); err != nil {
+			initErr = err
+		}
+	})
+	return initErr
+}
+
+// Get returns the singleton Config instance.
+// Init must be called before Get.
+func Get() *Config {
+	return instance
+}
