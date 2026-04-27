@@ -73,7 +73,8 @@ func Init(configPath string) error {
 		v.SetDefault("nginx.access_log", "/var/log/nginx/access.log")
 		v.SetDefault("nginx.error_log", "/var/log/nginx/error.log")
 		v.SetDefault("database.type", "sqlite")
-		v.SetDefault("database.path", "database.db")
+		// Store the database in a dedicated data directory to keep the repo root clean
+		v.SetDefault("database.path", "data/nginx-ui.db")
 		// Bind to localhost by default instead of all interfaces for better security
 		v.SetDefault("server.host", "127.0.0.1")
 		// Using port 9000 (upstream default) - changed back from 8080 since I run
@@ -97,10 +98,4 @@ func Init(configPath string) error {
 			// Config file not found is acceptable; use defaults
 			if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 				if !os.IsNotExist(err) {
-					initErr = err
-					return
-				}
-			}
-		}
-
-		// Ensure database direc
+				
