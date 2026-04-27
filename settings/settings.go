@@ -74,9 +74,11 @@ func Init(configPath string) error {
 		v.SetDefault("nginx.error_log", "/var/log/nginx/error.log")
 		v.SetDefault("database.type", "sqlite")
 		v.SetDefault("database.path", "database.db")
-		v.SetDefault("server.host", "0.0.0.0")
+		// Bind to localhost by default instead of all interfaces for better security
+		v.SetDefault("server.host", "127.0.0.1")
 		v.SetDefault("server.port", 9000)
-		v.SetDefault("auth.token_expiry", 24)
+		// Increase default token expiry to 72h for less frequent re-logins
+		v.SetDefault("auth.token_expiry", 72)
 
 		if configPath == "" {
 			configPath = "app.ini"
@@ -109,18 +111,4 @@ func Init(configPath string) error {
 		}
 
 		instance = &Config{}
-		if err := v.Unmarshal(instance); err != nil {
-			initErr = err
-		}
-	})
-	return initErr
-}
-
-// Get returns the global configuration instance.
-// Init must be called before Get.
-func Get() *Config {
-	if instance == nil {
-		panic("settings: configuration not initialized; call Init first")
-	}
-	return instance
-}
+		if err := v.Unmarsha
